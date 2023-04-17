@@ -1,85 +1,93 @@
-<?php
-class Client
-{
-    private ?int $matricule = null;
-    private ?string $img = null;
-    private ?string $type = null;
-    private ?float $prix = null;
+<?php 
+class Client {
 
-    public function __construct($i = null, $n, $t, $r)
+private $id;
+private $nom;
+private $prenom;
+private $ddn;
+private $tel;
+private $adresse;
+private $etat_civil;
+private $pass;
+
+
+public function __construct(int $id, string $nom,string $prenom,DateTime $ddn,string $tel,string $adresse, string $etat_civil,string $pass )
     {
-        $this->matricule = $i;
-        $this->img = $n;
-        $this->type = $t;
-        $this->prix = $r;
+        $this->id = $id;
+        $this->nom = $nom;
+        $this->prenom = $prenom;
+        $this->ddn =  $ddn;
+        $this->tel = $tel;
+        $this->adresse = $adresse;
+        $this->etat_civil = $etat_civil;
+        $this->pass=$pass;
     }
 
-    /**
-     * Get the value of idClient
-     */
-    public function getmatricule()
+    public function getId() : int
     {
-        return $this->matricule;
+        return $this->id;
+    }
+    public function setId(int $id)
+    {
+        $this->id=$id;
     }
 
-    /**
-     * Get the value of type
-     */
-    public function gettype()
+    public function getNom() : string 
     {
-        return $this->type;
+        return $this->nom;
+    }
+    public function setNom(string $nom )
+    {
+        $this->nom=$nom;
+    }
+    public function getPrenom() : string 
+    {
+        return $this->prenom;
+    }
+    public function setPrenom(string $prenom )
+    {
+        $this->prenom=$prenom;
+    }
+    public function getDdn(): DateTime
+    {
+        return $this->ddn;
     }
 
-    /**
-     * Set the value of type
-     *
-     * @return  self
-     */
-    public function settype($type)
+    public function setDdn(DateTime $ddn)
     {
-        $this->type = $type;
-
-        return $this;
+        $this->ddn=$ddn;
     }
-
-    /**
-     * Get the value of nom
-     */
-    public function getprix()
+    public function getTel() : string 
     {
-        return $this->prix;
+        return $this->tel;
     }
-
-    /**
-     * Set the value of nom
-     *
-     * @return  self
-     */
-    public function setprix($prix)
+    public function setTel(string $tel)
     {
-        $this->prix = $prix;
-
-        return $this;
+        $this->tel=$tel;
     }
-
-    /**
-     * Get the value of reclam
-     */
-    public function getimg()
+    public function getAdresse() : string 
     {
-        return $this->img;
+        return $this->adresse;
     }
-
-    /**
-     * Set the value of reclam
-     *
-     * @return  self
-     */
-    public function setimg($img)
+    public function setAdresse(string $adresse)
     {
-        $this->img = $img;
-
-        return $this;
+        $this->adresse=$adresse;
+    }
+    public function getEtat_civil() : string 
+    {
+        return $this->etat_civil;
+    }
+    public function setEtat_civil(string $etat_civil)
+    {
+        $this->etat_civil=$etat_civil;
+    }
+    public function getPass() : string 
+    {
+        return $this->pass;
+    }
+    public function setPass(string $pass)
+    {
+        $this->pass=$pass;
     }
 
 

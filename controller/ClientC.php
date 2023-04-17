@@ -1,89 +1,134 @@
 <?php
-include '../config.php';
-include '../model/Client.php';
 
-class equipementC
+    require_once '..\..\config.php';
+    require_once '..\..\Model\Client.php';
 
-{
-    public function listClients()
-    {
-        $sql = "SELECT * FROM equipement";
-        $db = config::getConnexion();
-        try {
-            $query = $db->prepare($sql);
-            $query->execute();
-            return $query->fetchAll();
-        } catch (Exception $e) {
-            die('Error:' . $e->getMessage());
+    class ClientC {
+
+        function afficherClient()
+        {
+            $requete = "select * from client";
+            $config = config::getConnexion();
+            try {
+                $querry = $config->prepare($requete);
+                $querry->execute();
+                //$result = $querry->fetchAll(PDO::FETCH_COLUMN, 1);
+                $result = $querry->fetchAll();
+                return $result ;
+            } catch (PDOException $th) {
+                 $th->getMessage();
+            }
         }
-    }
 
-    function deleteClient($i)
-    {
-        $sql = "DELETE FROM equipement WHERE matricule = :i";
-        $db = config::getConnexion();
-        $req = $db->prepare($sql);
-        $req->bindValue(':i', $i);
-
-        try {
-            $req->execute();
-        } catch (Exception $e) {
-            die('Error:' . $e->getMessage());
+        function getClientById($id)
+        {
+            $requete = "select * from client where id=:id";
+            $config = config::getConnexion();
+            try {
+                $querry = $config->prepare($requete);
+                $querry->execute(
+                    [
+                        'id'=>$id
+                    ]
+                );
+                $result = $querry->fetch();
+                return $result ;
+            } catch (PDOException $th) {
+                 $th->getMessage();
+            }
         }
-    }
 
-    function addClient($equipement)
-    {
-        $sql = "INSERT INTO equipement  
-        VALUES (NULL, :fn,:ln,:ad)";
-        $db = config::getConnexion();
-        try {
-            $query = $db->prepare($sql);
-            $query->execute([
-                'fn' => $equipement->getprix(),
-                'ln' => $equipement->gettype(),
-                'ad' => $equipement->getimg()
-            ]);
-        } catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage();
+       
+
+        function AjouterClient($client)
+        {
+            $config = config::getConnexion();
+            try {
+                $querry = $config->prepare('
+                INSERT INTO client
+                (nom,prenom,ddn ,tel, adresse,etat_civil,password )
+                VALUES
+                (:nom,:prenom,:ddn,:tel,:adresse,:etat_civil,:password)
+                ');
+                
+               $rs=$querry->execute([
+                    
+                    'nom'=>$client->getNom(),
+                    'prenom'=>$client->getPrenom(),
+                    'ddn'=>$client->getDdn()->format('Y-m-d'),
+                    'tel'=>$client->getTel(),
+                    'adresse'=>$client->getAdresse(),
+                    'etat_civil'=>$client->getEtat_civil(),
+                    'password'=>$client->getPass()
+                   
+                    
+                   
+                ]);
+                if ($rs) {
+                    echo "Client Created";
+                }
+                else {
+                    echo "ERROR";
+                }
+            } catch (PDOException $th) {
+                 $th->getMessage();
+            }
         }
-    }
 
-    function updateClient($equipement, $i)
-    {
-        try {
-            $db = config::getConnexion();
-            $query = $db->prepare(
-                'UPDATE equipement SET 
-                    prix = :prix, 
-                    type = :type, 
-                    img = :img
-                WHERE matricule= :matricule'
-            );
-            $query->execute([
-                'matricule' => $i,
-                'prix' => $equipement->getprix(),
-                'type' => $equipement->gettype(),
-                'img' => $equipement->getimg()
-            ]);
-            echo $query->rowCount() . " records UPDATED successfully <br>";
-        } catch (PDOException $e) {
-            $e->getMessage();
+        function ModifierClient($client)
+        {
+            $config = config::getConnexion();
+            try {
+                $querry = $config->prepare('
+                UPDATE client SET
+                nom=:nom,prenom=:prenom,ddn=:ddn,tel=:tel,adresse=:adresse,etat_civil=:etat_civil,password=:password
+                where id=:id');
+                
+                $querry->execute([
+                    'id'=>$client->getId(),
+                    'nom'=>$client->getNom(),
+                    'prenom'=>$client->getPrenom(),
+                    'ddn'=>$client->getDdn()->format('Y-m-d'),
+                    'tel'=>$client->getTel(),
+                    'adresse'=>$client->getAdresse(),
+                    'etat_civil'=>$client->getEtat_civil(),
+                    'password'=>$client->getPass()
+                    
+
+                  
+                ]);
+            } catch (PDOException $th) {
+                 $th->getMessage();
+            }
         }
-    }
 
-    function showClient($i)
-    {
-        $sql = "SELECT * from equipement where matricule = $i";
-        $db = config::getConnexion();
-        try {
-            $query = $db->prepare($sql);
-            $query->execute();
-
-            $client = $query->fetch();
-            return $equipement;
-        } catch (Exception $e) {
-            die('Error: ' . $e->getMessage());
+        function SupprimerClient($id)
+        {
+            $sql="DELETE FROM client WHERE id= :id";
+			$db = config::getConnexion();
+			$req=$db->prepare($sql);
+			$req->bindValue(':id',$id);
+			try{
+				$req->execute();
+			}
+			catch (Exception $e){
+				die('Erreur: '.$e->getMessage());
+			}
         }
+
+        function searchform($search)
+        {
+            $requete = "select * from client  WHERE nom LIKE '%$search%'";
+            $config = config::getConnexion();
+            try {
+                $querry = $config->prepare($requete);
+                $querry->execute();
+                $result = $querry->fetchAll();
+                return $result ;
+            } catch (PDOException $th) {
+                 $th->getMessage();
+            }
+        }
+      
+
     }
-}
