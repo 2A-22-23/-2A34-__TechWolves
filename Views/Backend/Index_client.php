@@ -4,7 +4,7 @@
 include '../../Controller/ClientC.php';
 
 require_once '../../model/Client.php';
-
+session_start();
 $clientC = new ClientC();
 $listclients = $clientC->afficherClient();
     
@@ -368,6 +368,12 @@ $listclients = $clientC->afficherClient();
                   </table>
 
                 </div>
+                <div>
+        <center>
+            <form action="pdf.php">
+    <button  class="btn btn-primary me-2 "   >Exporter PDF</button></form>
+    </center>
+    </div>
     </section>
 
   </main><!-- End #main -->

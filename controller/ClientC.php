@@ -46,9 +46,9 @@
             try {
                 $querry = $config->prepare('
                 INSERT INTO client
-                (nom,prenom,ddn ,tel, adresse,etat_civil,password )
+                (nom,prenom,ddn ,tel, adresse,etat_civil,password,role )
                 VALUES
-                (:nom,:prenom,:ddn,:tel,:adresse,:etat_civil,:password)
+                (:nom,:prenom,:ddn,:tel,:adresse,:etat_civil,:password,:role)
                 ');
                 
                $rs=$querry->execute([
@@ -59,7 +59,8 @@
                     'tel'=>$client->getTel(),
                     'adresse'=>$client->getAdresse(),
                     'etat_civil'=>$client->getEtat_civil(),
-                    'password'=>$client->getPass()
+                    'password'=>$client->getPass(),
+                    'role'=>$client->getRole()
                    
                     
                    
@@ -81,7 +82,7 @@
             try {
                 $querry = $config->prepare('
                 UPDATE client SET
-                nom=:nom,prenom=:prenom,ddn=:ddn,tel=:tel,adresse=:adresse,etat_civil=:etat_civil,password=:password
+                nom=:nom,prenom=:prenom,ddn=:ddn,tel=:tel,adresse=:adresse,etat_civil=:etat_civil,password=:password,role=:role
                 where id=:id');
                 
                 $querry->execute([
@@ -92,7 +93,8 @@
                     'tel'=>$client->getTel(),
                     'adresse'=>$client->getAdresse(),
                     'etat_civil'=>$client->getEtat_civil(),
-                    'password'=>$client->getPass()
+                    'password'=>$client->getPass(),
+                    'role'=>$client->getRole()
                     
 
                   
@@ -129,6 +131,61 @@
                  $th->getMessage();
             }
         }
+
+        function connexionUser($email,$password)
+        {
+    
+            $db=config::getConnexion();
+            $sql="SELECT * FROM client WHERE adresse='". $email ."' AND password='". $password. "'";
+            try{
+                $query=$db->prepare($sql);
+                $query->execute();
+                $count=$query->rowCount();
+                $result = $query->fetch(PDO::FETCH_OBJ);
+                if($count==0)
+                {
+                    $message="verifier donnees login";
+                }
+                else{
+                    
+                    
+                    $x=$query->fetch();
+                    $message=$x['adresse'];
+                    $_SESSION['id'] = $result->id ;
+                    $_SESSION['nom'] = $result->nom ;
+                    $_SESSION['prenom'] = $result->prenom ;
+                    $_SESSION['ddn'] = $result->ddn ;
+                    $_SESSION['password'] = $result->password ;
+                    $_SESSION['adresse'] = $result->adresse ;
+                    $_SESSION['role']=$result->role;
+                        echo "$message";
+    
+                }
+    
+    
+            }
+            catch (Exception $e)
+                    {
+                        $message= " ".$e->getMessage();
+                    }
+    
+                return $message;
+    
+    
+        }
+        function Recherche($search)
+            {
+                $requete = "select * from client  WHERE nom LIKE '%$search%'";
+                $config = config::getConnexion();
+                try {
+                    $querry = $config->prepare($requete);
+                    $querry->execute();
+                    $result = $querry->fetchAll();
+                    return $result ;
+                } catch (PDOException $th) {
+                     $th->getMessage();
+                }
+            }
       
 
     }

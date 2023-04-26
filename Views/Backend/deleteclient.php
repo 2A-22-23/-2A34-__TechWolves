@@ -2,7 +2,7 @@
 include '../../Controller/ClientC.php';
 
 require_once '../../model/Client.php';
-
+session_start();
 if(isset($_GET['id']))
 {
     $clientC = new ClientC();

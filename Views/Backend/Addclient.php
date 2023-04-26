@@ -1,6 +1,6 @@
 <?php 
 
-
+session_start();
 include '../../Controller/ClientC.php';
 
 require_once '../../model/Client.php';
@@ -12,7 +12,7 @@ $clientC = new ClientC();
             $clientC = new ClientC();
           
             $date = DateTime::createFromFormat('Y-m-d', $_POST['ddn']);
-            $client = new Client(1, $_POST['nom'],$_POST['prenom'],$date,$_POST['tel'],$_POST['adresse'],$_POST['etat_civil'],$_POST['pass'] );
+            $client = new Client(1, $_POST['nom'],$_POST['prenom'],$date,$_POST['tel'],$_POST['adresse'],$_POST['etat_civil'],$_POST['pass'],$_POST['role'] );
             $clientC->AjouterClient($client);
             
            
@@ -402,15 +402,28 @@ $clientC = new ClientC();
                       <option value="Celibaitaire">Célibaitaire</option>
                       <option value="Divorcé">Divorcé(e)</option>
                     </select>
+                    </div>
+                </div>
+                    <div class="row mb-3">
+                  <label class="col-sm-2 col-form-label">Role</label>
+                  <div class="col-sm-10">
+                    <select name="role" class="form-select" aria-label="Default select example">
+                     
+                      <option value="Admin">Admin(e)</option>
+                      <option value="Client">Client</option>
+                      
+                    </select>
                   </div>
                 </div>
-
+                
+                
+      
                
 
                 <div class="row mb-3">
                   <label class="col-sm-2 col-form-label">Ajouter un client</label>
                   <div class="col-sm-10">
-                    <button name="add" id="submit-btn" type="submit" class="btn btn-primary">Ajouter</button>
+                    <button name="add" id="add" type="submit" class="btn btn-primary">Ajouter</button>
                   </div>
                 </div>
 
@@ -447,72 +460,6 @@ $clientC = new ClientC();
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-
-
-var submitBtn = document.getElementById('submit-btn');
-
-
-submitBtn.addEventListener('click', function(event) {
-  var nomInput = document.getElementById('nom');
-  var nomValue = nomInput.value;
-
-
-  if (/^[a-zA-Z]+$/.test(nomValue)) {
-    // nom input is valid
-  } else {
-    event.preventDefault();
-    var nomErrorMsg = document.createElement('span');
-    nomErrorMsg.innerText = 'Le nom du client ne doit contenir que des lettres.';
-    nomInput.parentNode.insertBefore(nomErrorMsg, nomInput.nextSibling);
-  }
-
-
-  var prenomInput = document.getElementById('prenom');
-  var prenomValue = prenomInput.value;
-
-
-  if (/^[a-zA-Z]+$/.test(prenomValue)) {
-    // prenom input is valid
-  } else {
-    event.preventDefault();
-    var prenomErrorMsg = document.createElement('span');
-    prenomErrorMsg.innerText = 'Le prenom du client ne doit contenir que des lettres.';
-    prenomInput.parentNode.insertBefore(prenomErrorMsg, prenomInput.nextSibling);
-  }
-
-
-  var emailInput = document.getElementById('adresse');
-  var emailValue = emailInput.value;
-
-
-  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
-    // email input is valid
-  } else {
-    event.preventDefault();
-    var emailErrorMsg = document.createElement('span');
-    emailErrorMsg.innerText = 'Veuillez entrer une adresse email valide.';
-    emailInput.parentNode.insertBefore(emailErrorMsg, emailInput.nextSibling);
-  }
-
-  var telInput = document.getElementById('tel');
-  var telValue = telInput.value;
-
-  if (/^\d{8}$/.test(telValue)) {
-    // tel input is valid
-  } else {
-    event.preventDefault();
-    var telErrorMsg = document.createElement('span');
-    telErrorMsg.innerText = 'Le numéro de téléphone doit contenir exactement 8 chiffres.';
-    telInput.parentNode.insertBefore(telErrorMsg, telInput.nextSibling);
-  }
-
-});
-
-
-});
-</script>
 
 </body>
 

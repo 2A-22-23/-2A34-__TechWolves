@@ -9,9 +9,10 @@ private $tel;
 private $adresse;
 private $etat_civil;
 private $pass;
+private $role;
 
 
-public function __construct(int $id, string $nom,string $prenom,DateTime $ddn,string $tel,string $adresse, string $etat_civil,string $pass )
+public function __construct(int $id, string $nom,string $prenom,DateTime $ddn,string $tel,string $adresse, string $etat_civil,string $pass,string $role )
     {
         $this->id = $id;
         $this->nom = $nom;
@@ -21,8 +22,17 @@ public function __construct(int $id, string $nom,string $prenom,DateTime $ddn,st
         $this->adresse = $adresse;
         $this->etat_civil = $etat_civil;
         $this->pass=$pass;
+        $this->role=$role;
     }
 
+    public function getRole() : string
+    {
+        return $this->role;
+    }
+    public function setRole(string $rol)
+    {
+        $this->role=$rol;
+    }
     public function getId() : int
     {
         return $this->id;
@@ -31,6 +41,7 @@ public function __construct(int $id, string $nom,string $prenom,DateTime $ddn,st
     {
         $this->id=$id;
     }
+
 
     public function getNom() : string 
     {

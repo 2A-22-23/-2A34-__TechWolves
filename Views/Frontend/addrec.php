@@ -1,6 +1,6 @@
 <?php 
 
-
+session_start();
 include '../../Controller/ReclamationC.php';
 
 require_once '../../model/Reclamation.php';
@@ -12,7 +12,7 @@ $recC = new ReclamationC();
             $recC = new ReclamationC();
           
             
-            $rec = new Reclamation(1, $_POST['titre'],$_POST['type'],$_POST['description'],0,6 );
+            $rec = new Reclamation(1, $_POST['titre'],$_POST['type'],$_POST['description'],0,1 );
             $recC->AjouterRec($rec);
             
            
@@ -23,8 +23,13 @@ $recC = new ReclamationC();
           echo 'error';
           //header('Location:blank.php');
       }
-    
-    $listrec = $recC->afficherRecByUser(6);
+      if(isset($_REQUEST['submit-search']))
+      {
+       $listrec = $recC->Recherche($_POST['search'],1);
+      }else {
+    $listrec = $recC->afficherRecByUser(1);
+      }
+      
 
 ?> 
 
@@ -261,6 +266,17 @@ $recC = new ReclamationC();
   }
 </style>
 <h1> Mes Reclamations</h1>
+<div>
+<form method="POST">
+    <div class="search-form">
+        <input type="text" id="search-box" name="search" placeholder="search here...">
+        <label   class="fas fa-search">
+        <button type="submit" name="submit-search"  class="hidden">Recherche</button>
+        </label>
+    </div>
+</form>
+</div>
+<div>
 <table class="rec-table">
   <thead>
     <tr>
@@ -291,7 +307,7 @@ $recC = new ReclamationC();
     <?php } ?>
   </tbody>
 </table>
-    
+    <div>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->

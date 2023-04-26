@@ -1,6 +1,6 @@
 <?php 
 
-
+session_start();
 include '../../Controller/ClientC.php';
 include '../../Controller/ReclamationC.php';
 

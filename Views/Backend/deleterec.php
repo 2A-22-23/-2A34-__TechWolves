@@ -2,7 +2,7 @@
 include '../../Controller/ReclamationC.php';
 
 require_once '../../model/Reclamation.php';
-
+session_start();
 if(isset($_GET['id']))
 {
     $recC = new ReclamationC();

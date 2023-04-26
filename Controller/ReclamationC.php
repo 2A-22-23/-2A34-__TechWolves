@@ -129,6 +129,22 @@
 			}
         }
 
+        function Recherche($search,$id)
+        {
+            $requete = "select * from reclamation  WHERE titre LIKE '%$search%' AND id_client=$id";
+            $config = config::getConnexion();
+            try {
+                $querry = $config->prepare($requete);
+                
+                $querry->execute();
+                $result = $querry->fetchAll();
+                return $result ;
+            } catch (PDOException $th) {
+                 $th->getMessage();
+            }
+        }
+  
+
         
       
 
