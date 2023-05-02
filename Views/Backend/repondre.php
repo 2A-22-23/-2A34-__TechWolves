@@ -1,18 +1,34 @@
 <?php 
 
 session_start();
-include '../../Controller/ClientC.php';
-include '../../Controller/ReclamationC.php';
 include '../../Controller/ReponseC.php';
+include '../../Controller/ReclamationC.php';
 
-require_once '../../model/Reponse.php';
 require_once '../../model/Reclamation.php';
-require_once '../../model/Client.php';
+require_once '../../model/Reponse.php';
 
-$clientC = new ClientC();
-$listclients = $clientC->afficherClient();
-$recC = new ReclamationC();
-$listrec = $recC->afficherRec();   
+if(isset($_GET['id']))
+{
+
+    $recC = new ReclamationC();
+    $rec = $recC->getRecById($_GET['id']);
+    $recX = new Reclamation($rec['id'],$rec['titre'],$rec['type'],$rec['description'],1,1);
+    $recC->ModifierRec($recX);
+    
+}
+
+if (isset($_REQUEST['add'])){
+    $recC = new ReclamationC();
+$repC = new ReponseC();
+$rep = new Reponse(1,$_POST['contenu'],$_GET['id'],1);
+$repC->Ajouter($rep);
+header('Location:Index_rec.php');
+}
+
+
+
+    
+    
 
 ?> 
 
@@ -310,7 +326,7 @@ $listrec = $recC->afficherRec();
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link collapsed" href="index_client.php">
+        <a class="nav-link collapsed" href="Index_client.php">
           <i class="bi bi-person"></i>
           <span>Affichage Client</span>
         </a>
@@ -335,49 +351,28 @@ $listrec = $recC->afficherRec();
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           <li class="breadcrumb-item">Gestion Reclamation</li>
-          <li class="breadcrumb-item active">Affichage Reclamation</li>
+          <li class="breadcrumb-item active">Reponse</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
-
+    
     <section class="section">
-    <div class="card-body pb-0">
-                  <h5 class="card-title">Liste des Reclamations </h5>
-
-                  <table class="table table-borderless">
-                    <thead>
-                      <tr>
-                        <th scope="col">Titre</th>
-                        <th scope="col">Type</th>
-                        <th scope="col">Description de naissance</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Client</th>
-                        
-                        <th scope="col">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($listrec as $key) { ?>
-                      <tr>
-                        <td><?php echo $key['titre'] ?> </td>
-                        <td><?php echo $key['type'] ?></td>
-                        <td><?php echo $key['description'] ?></td>
-                        <td><?php if($key['etat']==0){ ?>Non traitée <?php } ?>
-                        <?php if($key['etat']==1){ ?> traitée <?php } ?></td>
-                        <td><?php $clientC = new ClientC();
-                        $client = $clientC->getClientById($key['id_client']);
-                        echo $client['nom'] ?></td>
-
-                        
-                        <td> <?php $repC = new ReponseC();
-                        if(!$repC->getOneByRecId($key['id'])){ ?> <a href="repondre.php?id=<?php echo $key['id'] ?>">Repondre ||</a><?php }?><a style="color:red;"href="deleterec.php?id=<?php echo $key['id'] ?>">Supprimer</a></td>
-                        
-                      </tr>
-                      <?php } ?>
-                    </tbody>
-                  </table>
-
+    <form method="POST" action="" >
+                <div class="row mb-3">
+                  <label for="inputText" class="col-sm-2 col-form-label">Contenu</label>
+                  <div class="col-sm-10">
+                    <textarea name="contenu" id="contenu" type="text" class="form-control"></textarea>
+                  </div>
                 </div>
+            
+
+                
+                  <div class="col-sm-10">
+                    <button name="add" id="add" type="submit" class="btn btn-primary">Repondre</button>
+                  </div>
+                </div>
+
+              </form>
     </section>
 
   </main><!-- End #main -->

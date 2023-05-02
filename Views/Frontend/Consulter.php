@@ -1,32 +1,23 @@
-<?php 
+<?php
 
+ 
 
-include '../../Controller/ClientC.php';
+session_start();
+include '../../Controller/ReponseC.php';
+include '../../Controller/ReclamationC.php';
 
-require_once '../../model/Client.php';
+require_once '../../model/Reclamation.php';
+require_once '../../model/Reponse.php';
 
-$clientC = new ClientC();
+$repC = new ReponseC();
+if(isset($_GET['id']))
+{
+    $recC = new ReclamationC();
+$recalamation = $recC->getRecById($_GET['id']);
+$rep = $repC->getOneByRecId($_GET['id']);
+}
 
-
-          if (isset($_REQUEST['add'])) {
-            $clientC = new ClientC();
-          
-            $date = DateTime::createFromFormat('Y-m-d', $_POST['ddn']);
-            $client = new Client(1, $_POST['nom'],$_POST['prenom'],$date,$_POST['tel'],$_POST['adresse'],$_POST['etat_civil'],$_POST['pass'],"Client" );
-            $clientC->AjouterClient($client);
-            
-           
-            header('Location:login.php');
-          } 
-         
-       else {
-          echo 'error';
-          //header('Location:blank.php');
-      }
-    
-    
-
-?> 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -94,14 +85,10 @@ $clientC = new ClientC();
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto " href="login.php">Login</a></li>
-          <li><a class="nav-link scrollto active" href="Inscrire.php">Inscription</a></li>
+          <li><a class="nav-link scrollto active" href="MesRec.php">Home</a></li>
          
-          <li><a class="nav-link scrollto" href="#team">Team</a></li>
-          <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
              
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+         
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -110,81 +97,44 @@ $clientC = new ClientC();
   </header><!-- End Header -->
 
   <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex align-items-center">
-    <div class="container position-relative" data-aos="fade-up" data-aos-delay="500">
-      <h1>Welcome to Day</h1>
-      <h2>We are team of talented designers making websites with Bootstrap</h2>
-      <a href="#about" class="btn-get-started scrollto">Get Started</a>
-    </div>
+  <section>
+  <div class="reclamation-reply">
+  <h3 class="reply-title">Titre:<?php echo $recalamation['titre']?></h3>
+  <p class="reclamation-text">Description : <?php echo $recalamation['description']?></p>
+  
+  <h3 class="reply-title">Notre Reponse:</h3>
+  <p class="reply-text"><?php echo $rep['contenu']?></p>
+</div>
   </section><!-- End Hero -->
+<style>
+.reclamation-reply {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+}
 
+.reply-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.reclamation-text {
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.reply-text {
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+    </style>
   <main id="main">
-<section id="section" class="section">
-  <form method="POST" action="" >
-                <div class="row mb-3">
-                  <label for="inputText" class="col-sm-2 col-form-label">Nom</label>
-                  <div class="col-sm-10">
-                    <input name="nom" id="nom" type="text" class="form-control">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="inputEmail" class="col-sm-2 col-form-label">Prenom</label>
-                  <div class="col-sm-10">
-                    <input name="prenom" id="prenom" type="text" class="form-control">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="inputTime" class="col-sm-2 col-form-label">Date de naissance</label>
-                  <div class="col-sm-10">
-                    <input name="ddn" type="date" class="form-control">
-                  </div>
-                </div>
 
-                <div class="row mb-3">
-                  <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-                  <div class="col-sm-10">
-                    <input name="pass" id="pass" type="password" class="form-control">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="inputNumber" class="col-sm-2 col-form-label">tel</label>
-                  <div class="col-sm-10">
-                    <input name="tel" id="tel" type="text" class="form-control">
-                  </div>
-                </div>
-               
-                <div class="row mb-3">
-                  <label for="inputPassword" class="col-sm-2 col-form-label">Adresse</label>
-                  <div class="col-sm-10">
-                    <textarea name="adresse" id="adresse" class="form-control" style="height: 100px"></textarea>
-                  </div>
-                </div>
-              
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Etat civil</label>
-                  <div class="col-sm-10">
-                    <select name="etat_civil" class="form-select" aria-label="Default select example">
-                     
-                      <option value="Marie">Marié(e)</option>
-                      <option value="Celibaitaire">Célibaitaire</option>
-                      <option value="Divorcé">Divorcé(e)</option>
-                    </select>
-                  </div>
-                </div>
-
-               
-
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Ajouter un client</label>
-                  <div class="col-sm-10">
-                    <button name="add" id="add" type="submit" class="btn btn-primary">S'inscrire</button>
-                  </div>
-                </div>
-
-              </form>
-    </section>
     
-
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->

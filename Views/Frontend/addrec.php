@@ -23,12 +23,7 @@ $recC = new ReclamationC();
           echo 'error';
           //header('Location:blank.php');
       }
-      if(isset($_REQUEST['submit-search']))
-      {
-       $listrec = $recC->Recherche($_POST['search'],1);
-      }else {
-    $listrec = $recC->afficherRecByUser(1);
-      }
+     
       
 
 ?> 
@@ -101,8 +96,8 @@ $recC = new ReclamationC();
         <ul>
           <li><a class="nav-link scrollto " href="">Home</a></li>
           <li><a class="nav-link scrollto" href="#about">Profile</a></li>
-          <li><a class="nav-link scrollto active" href="addrec.php">Reclamation</a></li>
-          <li><a class="nav-link scrollto " href="#portfolio">Portfolio</a></li>
+          <li><a class="nav-link scrollto active" href="addrec.php">Passer Reclamation</a></li>
+          <li><a class="nav-link scrollto " href="MesRec.php">Mes Reclamation</a></li>
           <li><a class="nav-link scrollto" href="#pricing">Pricing</a></li>
           <li><a class="nav-link scrollto" href="#team">Team</a></li>
           <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
@@ -215,99 +210,7 @@ $recC = new ReclamationC();
   <main id="main">
   
       
-  <style>
-  /* Table Styles */
-  .rec-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 1rem;
-    font-family: 'Roboto', sans-serif;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  }
-
-  .rec-table th {
-    background-color: #8B0000;
-    color: #ffffff;
-    text-align: left;
-    padding: 12px;
-  }
-
-  .rec-table th,
-  .rec-table td {
-    border: 1px solid #ddd;
-    padding: 12px;
-  }
-
-  .rec-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
-  /* Status Styles */
-  .status {
-    display: inline-block;
-    padding: 5px 10px;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 20px;
-    text-transform: uppercase;
-  }
-
-  .status-pending {
-    background-color: #f1c40f;
-  }
-
-  .status-in-progress {
-    background-color: #3498db;
-  }
-
-  .status-completed {
-    background-color: #2ecc71;
-  }
-</style>
-<h1> Mes Reclamations</h1>
-<div>
-<form method="POST">
-    <div class="search-form">
-        <input type="text" id="search-box" name="search" placeholder="search here...">
-        <label   class="fas fa-search">
-        <button type="submit" name="submit-search"  class="hidden">Recherche</button>
-        </label>
-    </div>
-</form>
-</div>
-<div>
-<table class="rec-table">
-  <thead>
-    <tr>
-      <th>Titre</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Etat</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach($listrec as $key) { ?>
-      <tr>
-        <td><?php echo $key['titre']; ?></td>
-        <td><?php echo $key['type']; ?></td>
-        <td><?php echo $key['description']; ?></td>
-        <td>
-          
-            <?php  if($key['etat']==0){ ?>
-                <span>non traiée
-          </span>
-          <?php } ?>
-          <?php  if($key['etat']==1){ ?>
-                <span>traiée
-          </span>
-          <?php } ?>
-        </td>
-      </tr>
-    <?php } ?>
-  </tbody>
-</table>
-    <div>
+  
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->

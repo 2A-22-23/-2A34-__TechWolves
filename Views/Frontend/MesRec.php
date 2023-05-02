@@ -1,30 +1,20 @@
 <?php 
 
+session_start();
+include '../../Controller/ReclamationC.php';
 
-include '../../Controller/ClientC.php';
+require_once '../../model/Reclamation.php';
 
-require_once '../../model/Client.php';
+$recC = new ReclamationC();
 
-$clientC = new ClientC();
-
-
-          if (isset($_REQUEST['add'])) {
-            $clientC = new ClientC();
-          
-            $date = DateTime::createFromFormat('Y-m-d', $_POST['ddn']);
-            $client = new Client(1, $_POST['nom'],$_POST['prenom'],$date,$_POST['tel'],$_POST['adresse'],$_POST['etat_civil'],$_POST['pass'],"Client" );
-            $clientC->AjouterClient($client);
-            
-           
-            header('Location:login.php');
-          } 
-         
-       else {
-          echo 'error';
-          //header('Location:blank.php');
-      }
-    
-    
+$listrec = $recC->afficherRecByUser(1);
+if(isset($_REQUEST['submit-search']))
+{
+ $listrec = $recC->Recherche($_POST['search'],1);
+}else {
+$listrec = $recC->afficherRecByUser(1);
+}
+      
 
 ?> 
 
@@ -94,9 +84,11 @@ $clientC = new ClientC();
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto " href="login.php">Login</a></li>
-          <li><a class="nav-link scrollto active" href="Inscrire.php">Inscription</a></li>
-         
+          <li><a class="nav-link scrollto " href="">Home</a></li>
+          <li><a class="nav-link scrollto" href="#about">Profile</a></li>
+          <li><a class="nav-link scrollto " href="addrec.php">Passer Reclamation</a></li>
+          <li><a class="nav-link scrollto active " href="MesRec.php">Mes Reclamation</a></li>
+          <li><a class="nav-link scrollto" href="#pricing">Pricing</a></li>
           <li><a class="nav-link scrollto" href="#team">Team</a></li>
           <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
@@ -106,85 +98,113 @@ $clientC = new ClientC();
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
+
     </div>
   </header><!-- End Header -->
 
   <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex align-items-center">
-    <div class="container position-relative" data-aos="fade-up" data-aos-delay="500">
-      <h1>Welcome to Day</h1>
-      <h2>We are team of talented designers making websites with Bootstrap</h2>
-      <a href="#about" class="btn-get-started scrollto">Get Started</a>
+  <section>
+  <style>
+  /* Table Styles */
+  .rec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .rec-table th {
+    background-color: #8B0000;
+    color: #ffffff;
+    text-align: left;
+    padding: 12px;
+  }
+
+  .rec-table th,
+  .rec-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+  }
+
+  .rec-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  /* Status Styles */
+  .status {
+    display: inline-block;
+    padding: 5px 10px;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+
+  .status-pending {
+    background-color: #f1c40f;
+  }
+
+  .status-in-progress {
+    background-color: #3498db;
+  }
+
+  .status-completed {
+    background-color: #2ecc71;
+  }
+</style>
+<h1> Mes Reclamations</h1>
+<div>
+<form method="POST">
+    <div class="search-form">
+        <input type="text" id="search-box" name="search" placeholder="search here...">
+        <label   class="fas fa-search">
+        <button type="submit" name="submit-search"  class="hidden">Recherche</button>
+        </label>
     </div>
-  </section><!-- End Hero -->
+</form>
+</div>
+<div>
+<table class="rec-table">
+  <thead>
+    <tr>
+      <th>Titre</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Etat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach($listrec as $key) { ?>
+      <tr>
+        <td><?php echo $key['titre']; ?></td>
+        <td><?php echo $key['type']; ?></td>
+        <td><?php echo $key['description']; ?></td>
+        <td>
+          
+            <?php  if($key['etat']==0){ ?>
+                <span>non traiée
+          </span>
+          <?php } ?>
+          <?php  if($key['etat']==1){ ?>
+                <span>traiée
+          </span>
+          <a href="Consulter.php?id=<?php echo $key['id'] ?>">
+          <button class="primary-btn-red">Reponse</button></a>
+          
+          <?php } ?>
+        </td>
+      </tr>
+    <?php } ?>
+  </tbody>
+</table>
+    <div>
+</section>
 
   <main id="main">
-<section id="section" class="section">
-  <form method="POST" action="" >
-                <div class="row mb-3">
-                  <label for="inputText" class="col-sm-2 col-form-label">Nom</label>
-                  <div class="col-sm-10">
-                    <input name="nom" id="nom" type="text" class="form-control">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="inputEmail" class="col-sm-2 col-form-label">Prenom</label>
-                  <div class="col-sm-10">
-                    <input name="prenom" id="prenom" type="text" class="form-control">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="inputTime" class="col-sm-2 col-form-label">Date de naissance</label>
-                  <div class="col-sm-10">
-                    <input name="ddn" type="date" class="form-control">
-                  </div>
-                </div>
 
-                <div class="row mb-3">
-                  <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-                  <div class="col-sm-10">
-                    <input name="pass" id="pass" type="password" class="form-control">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="inputNumber" class="col-sm-2 col-form-label">tel</label>
-                  <div class="col-sm-10">
-                    <input name="tel" id="tel" type="text" class="form-control">
-                  </div>
-                </div>
-               
-                <div class="row mb-3">
-                  <label for="inputPassword" class="col-sm-2 col-form-label">Adresse</label>
-                  <div class="col-sm-10">
-                    <textarea name="adresse" id="adresse" class="form-control" style="height: 100px"></textarea>
-                  </div>
-                </div>
-              
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Etat civil</label>
-                  <div class="col-sm-10">
-                    <select name="etat_civil" class="form-select" aria-label="Default select example">
-                     
-                      <option value="Marie">Marié(e)</option>
-                      <option value="Celibaitaire">Célibaitaire</option>
-                      <option value="Divorcé">Divorcé(e)</option>
-                    </select>
-                  </div>
-                </div>
-
-               
-
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Ajouter un client</label>
-                  <div class="col-sm-10">
-                    <button name="add" id="add" type="submit" class="btn btn-primary">S'inscrire</button>
-                  </div>
-                </div>
-
-              </form>
-    </section>
     
-
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->

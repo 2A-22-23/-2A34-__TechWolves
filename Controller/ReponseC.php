@@ -1,13 +1,13 @@
 <?php
 
     require_once '..\..\config.php';
-    require_once '..\..\Model\Reclamation.php';
+    require_once '..\..\Model\Reponse.php';
 
-    class ReclamationC {
+    class ReponseC {
 
-        function afficherRec()
+        function afficher()
         {
-            $requete = "select * from reclamation";
+            $requete = "select * from reponse";
             $config = config::getConnexion();
             try {
                 $querry = $config->prepare($requete);
@@ -19,9 +19,9 @@
                  $th->getMessage();
             }
         }
-        function afficherRecByUser($id)
+        function afficherbyUser($id)
         {
-            $requete = "select * from reclamation where id_client=:id";
+            $requete = "select * from reponse where id_user=:id";
             $config = config::getConnexion();
             try {
                 $querry = $config->prepare($requete);
@@ -37,9 +37,27 @@
             }
         }
 
-        function getRecById($id)
+        function getOneById($id)
         {
-            $requete = "select * from reclamation where id=:id";
+            $requete = "select * from reponse where id=:id";
+            $config = config::getConnexion();
+            try {
+                $querry = $config->prepare($requete);
+                $querry->execute(
+                    [
+                        'id'=>$id
+                    ]
+                );
+                $result = $querry->fetch();
+                return $result ;
+            } catch (PDOException $th) {
+                 $th->getMessage();
+            }
+        }
+
+        function getOneByRecId($id)
+        {
+            $requete = "select * from reponse where id_reclamation=:id";
             $config = config::getConnexion();
             try {
                 $querry = $config->prepare($requete);
@@ -57,24 +75,23 @@
 
         
 
-        function AjouterRec($rec)
+        function Ajouter($rep)
         {
             $config = config::getConnexion();
             try {
                 $querry = $config->prepare('
-                INSERT INTO reclamation
-                (titre,type,description ,etat, id_client )
+                INSERT INTO reponse
+                (contenu,id_reclamation,id_user )
                 VALUES
-                (:titre,:type,:description,:etat,:id_client)
+                (:contenu,:id_reclamation,:id_user)
                 ');
                 
                $rs=$querry->execute([
                     
-                    'titre'=>$rec->getTitre(),
-                    'description'=>$rec->getDescription(),
-                    'type'=>$rec->getType(),
-                    'etat'=>$rec->getEtat(),
-                    'id_client'=>$rec->getId_client()
+                    'contenu'=>$rep->getContenu(),
+                    'id_reclamation'=>$rep->getId_reclamation(),
+                    'id_user'=>$rep->getId_user()
+                  
                    
                     
                    
@@ -90,22 +107,20 @@
             }
         }
 
-        function ModifierRec($rec)
+        function Modifier($rep)
         {
             $config = config::getConnexion();
             try {
                 $querry = $config->prepare('
-                UPDATE reclamation SET
-                titre=:titre,description=:description,type=:type,etat=:etat,id_client=:id_client
+                UPDATE reponse SET
+                contenu=:contenu,id_reclamation=:id_reclamation,id_user=:id_user
                 where id=:id');
                 
                 $querry->execute([
-                    'id'=>$rec->getId(),
-                    'titre'=>$rec->getTitre(),
-                    'description'=>$rec->getDescription(),
-                    'type'=>$rec->getType(),
-                    'etat'=>$rec->getEtat(),
-                    'id_client'=>$rec->getId_client()
+                    'id'=>$rep->getId(),
+                    'contenu'=>$rep->getContenu(),
+                    'id_reclamation'=>$rep->getId_reclamation(),
+                    'id_user'=>$rep->getId_user()
                     
 
                   
@@ -115,9 +130,9 @@
             }
         }
 
-        function SupprimerRec($id)
+        function Supprimer($id)
         {
-            $sql="DELETE FROM reclamation WHERE id= :id";
+            $sql="DELETE FROM reponse WHERE id= :id";
 			$db = config::getConnexion();
 			$req=$db->prepare($sql);
 			$req->bindValue(':id',$id);
@@ -129,20 +144,7 @@
 			}
         }
 
-        function Recherche($search,$id)
-        {
-            $requete = "select * from reclamation  WHERE titre LIKE '%$search%' AND id_client=$id";
-            $config = config::getConnexion();
-            try {
-                $querry = $config->prepare($requete);
-                
-                $querry->execute();
-                $result = $querry->fetchAll();
-                return $result ;
-            } catch (PDOException $th) {
-                 $th->getMessage();
-            }
-        }
+      
   
 
         
