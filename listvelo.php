@@ -1,56 +1,11 @@
-
 <?php
-
 include '../controller/equipementC.php';
 
+$bdd=new PDO('mysql:host=localhost;dbname=projet', 'root', '',);
+$equipementC = new equipementC();
+$list = $equipementC->listequipement();
 
-
-$error = "";
-
-// create equipment
-$equipement = null;
-
-// create an instance of the controller
-$equipementC = new EquipementC();
-
-if (
-    isset($_POST["matricule"]) &&
-    isset($_POST["prix"]) &&
-    isset($_POST["type"]) &&
-    isset($_POST["id_stock"]) &&
-    isset($_POST["img"])&&
-    isset($_POST["nb_like"])
-) {
-    if (
-        !empty($_POST['matricule']) &&
-        !empty($_POST['prix']) &&
-        !empty($_POST["type"]) &&
-        !empty($_POST['id_stock']) &&
-        !empty($_POST["img"])&&
-        !empty($_POST['nb_like'])
-    ) {
-        $equipement = new equipement(
-            $_POST['matricule'],
-			$_POST['img'],
-            $_POST['type'],
-            $_POST['prix'],
-            $_POST['id_stock'],
-            $_POST['nb_like']
-
-        );
-        $equipementC->updateequipement($equipement,$_POST['matricule']);
-        header('Location: listequipement.php');
-    } else {
-        $error = "Missing information";
-    }
-}
 ?>
-
-
-
-
-
-
 <html>
 
 <head>
@@ -166,80 +121,75 @@ if (
 		  	</div>
 		</aside>
 
-        <div id="error">
-        <?php echo $error; ?>
-    </div>
+<center>
 
-    <?php
-    if (isset($_POST['matricule'])) {
-        $equipement = $equipementC->showClient($_POST['matricule']);
+		
+<h1>liste des equipements</h1>
+<h2>
+	<hr>
+	<a href="liststock.php">liste des stocks </a>
+</h2>
 
-    ?>
+</center>
+			
+		
+		<div class="container-wrap">
+		<div id="fh5co-sermon">
+			<div class="row animate-box">
+				<div class="col-md-6 col-md-offset-3 text-center fh5co-heading">
+					<h2>Nous equipements </h2>
+					<p>Consulter nous articles et prend la possibilité d'obtenir l'article que vous désirer gratuitement !</p>
+				</div>
+			</div>
+			<a href="addequipement.php">Ajouter un article <i class="icon-arrow-right3"></i></a>
+			<br><br>
 
-        <form action="" method="POST">
-            <table border="1" align="center">
-    
-                <tr>
-                    <td>
-                        <label for="matricule">Matricule:
-                        </label>
-                    </td>
-                    <td><input type="text" name="matricule" id="matricule" value="<?php echo $equipement['matricule']; ?>" maxlength="20"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="prix">Prix:
-                        </label>
-                    </td>
-                    <td><input type="text" name="prix" id="prix" value="<?php echo $equipement['prix']; ?>" maxlength="20"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="img">image:
-                        </label>
-                    </td>
-                    <td>
-                        <input type="text" name="img" value="<?php echo $equipement['img']; ?>" id="img">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="dob">type:
-                        </label>
-                    </td>
-                    <td>
-                        <input type="text" name="type" id="type" value="<?php echo $equipement['type']; ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="dob">id du stock:
-                        </label>
-                    </td>
-                    <td>
-                        <input type="text" name="id_stock" id="id_stock" value="<?php echo $equipement['id_stock']; ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="dob">nb_like:
-                        </label>
-                    </td>
-                    <td>
-                        <input type="text" name="nb_like" id="nb_like" value="<?php echo $equipement['nb_like']; ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="submit" value="Update">
-                    </td>
-                    
-                </tr>
-            </table>
-        </form>
-    <?php
-    }
-    ?>
+
+<p>Type d'article </p>
+
+		
+			<li class="has-dropdown"><a href="#"> Tous</a>
+		                	<ul class="dropdown">
+								<li><a href="listequipement.php">Tous</a></li>
+								<li><a href="#"> Velo </a></li>	
+								<li><a href="listecasque.php">casque </a></li>	
+                                <li><a href="listsac.php"> Sac </a></li>	
+							</ul>
+			 
+							</li>	
+
+				<br><br>
+			<div class="row">
+			
+
+			
+			
+	<?php 
+                
+                foreach ($list as $client2) {  
+                    if( $client2['type']=="velo"){ 
+                        ?>
+					
+						
+					<a class="img-holder"><img class="img-responsive" src="images/<?php echo $client2['img'];  ?>"  ></a>
+						<div class="desc">
+							<span class="date"><?php echo $client2['type'];  ?></span>
+							<h3><a><?php echo $client2['prix'];  ?></a></h3>					
+							
+                    <form method="POST" action="updateequipement.php">
+                        <input type="submit" name="update" value="Update">
+                        <input type="hidden" value=<?PHP echo $client2['matricule']; ?> name="matricule">
+
+                    </form>
+					<a href="deleteequipement.php?id=<?php echo $client2['matricule']; ?>">Delete</a>
+						</div>
+
+				<?php }} ?>
+
+			</div>
+		</div>
+		
+		
 	
 
 
@@ -343,4 +293,3 @@ if (
 </body>
 
 </html>
-

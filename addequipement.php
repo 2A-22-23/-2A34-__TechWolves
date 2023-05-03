@@ -30,7 +30,7 @@ if (
 			$_POST['img'],
             $_POST['prix'],
 			$_POST['id_stock'],
-
+			0
         );
         $equipementC->addequipement($equipement);
         header('Location: listequipement.php');
@@ -180,7 +180,7 @@ if (
 						<div class="col-md-6">
 							<div class="form-group">
 								<p>Entrer une image</p>
-								<input id="img" type="text" class="form-control" placeholder="img"  name="img">
+								<input id="img" type="file" class="form-control" placeholder="img"  name="img">
 							</div>
 						</div>
 						<div class="col-md-6">
